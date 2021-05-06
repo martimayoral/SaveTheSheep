@@ -16,15 +16,23 @@ public class Sheep : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+        // vector from player and sheep
         Vector3 vec = player.transform.position - this.transform.position;
-        Vector3 direction = vec.normalized;
+
+        // direction: vector normalized
+        Vector3 direction = - vec.normalized;
+
+        // distance to move
         float dist = playerRepeelDistance - vec.magnitude;
-        Vector3 translation = - movementSpeed * direction * Time.deltaTime * dist;
+
+        // if the distance to move is away from the player
         if (dist > 0)
         {
-            transform.Translate(new Vector3(translation.x,0, translation.z));
+            // translation to aply
+            Vector3 translation = movementSpeed * direction * Time.deltaTime * dist;
+            rigidbody.MovePosition(this.transform.position + translation);
         }
     }
 }
