@@ -5,7 +5,7 @@ using UnityEngine;
 public class Sheep : MonoBehaviour
 {
     public float movementSpeed;
-    public GameObject player;
+    private List<GameObject> players = new List<GameObject>(); // 5
     public float playerRepeelDistance;
     Rigidbody rigidbody;
 
@@ -13,26 +13,33 @@ public class Sheep : MonoBehaviour
     void Start()
     {
         rigidbody = GetComponent<Rigidbody>();
+        players.Add(GameObject.Find("Red Player"));
+        players.Add(GameObject.Find("Blue Player"));
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        // vector from player and sheep
-        Vector3 vec = player.transform.position - this.transform.position;
+        Vector3 translation = this.transform.position;
 
-        // direction: vector normalized
-        Vector3 direction = - vec.normalized;
+        foreach (GameObject player in players ){
+            // vector from player and sheep
+            Vector3 vec = player.transform.position - this.transform.position;
 
-        // distance to move
-        float dist = playerRepeelDistance - vec.magnitude;
+            // direction: vector normalized
+            Vector3 direction = -vec.normalized;
 
-        // if the distance to move is away from the player
-        if (dist > 0)
-        {
-            // translation to aply
-            Vector3 translation = movementSpeed * direction * Time.deltaTime * dist;
-            rigidbody.MovePosition(this.transform.position + translation);
+            // distance to move
+            float dist = playerRepeelDistance - vec.magnitude;
+
+            // if the distance to move is away from the player
+            if (dist > 0)
+            {
+                // translation to aply
+                translation += movementSpeed * direction * Time.deltaTime * dist;
+            }
         }
+        
+        rigidbody.MovePosition(translation);
     }
 }
