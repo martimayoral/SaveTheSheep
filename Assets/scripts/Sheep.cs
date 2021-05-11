@@ -5,6 +5,7 @@ using UnityEngine;
 public class Sheep : MonoBehaviour
 {
     public float movementSpeed;
+    public float rotationSpeed;
     private List<GameObject> players = new List<GameObject>(); // 5
     public float playerRepeelDistance;
     Rigidbody rigidbody;
@@ -54,7 +55,13 @@ public class Sheep : MonoBehaviour
         }
 
         // update the rotation. Slerp will go to the desired location smoothly
-        rigidbody.MoveRotation(Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(toLook), 50 * Time.deltaTime));
+        rigidbody.MoveRotation(
+            Quaternion.Slerp(
+                transform.rotation, 
+                Quaternion.LookRotation(new Vector3(toLook.x, 0, toLook.z)), 
+                rotationSpeed * Time.deltaTime
+                )
+            );
 
         // we reduce the velocity each update
         rigidbody.velocity = rigidbody.velocity * 0.9f;
