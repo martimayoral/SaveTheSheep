@@ -17,10 +17,22 @@ public class Sheep : MonoBehaviour
         players.Add(GameObject.Find("Blue Player"));
     }
 
+    void move(Vector3 desiredPosition)
+    {
+        Vector3 direction = (desiredPosition - this.transform.position);
+        Ray ray = new Ray(this.transform.position, direction);
+        RaycastHit hit;
+        if (!Physics.Raycast(ray, out hit, direction.magnitude))
+            rigidbody.MovePosition(desiredPosition);
+        else
+            rigidbody.MovePosition(hit.point);
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
-        Vector3 translation = this.transform.position;
+        // if nothing happens, look forward
+        Vector3 toLook =  this.transform.forward * 10;
 
         foreach (GameObject player in players ){
             // vector from player and sheep
@@ -36,10 +48,16 @@ public class Sheep : MonoBehaviour
             if (dist > 0)
             {
                 // translation to aply
-                translation += movementSpeed * direction * Time.deltaTime * dist;
+                toLook += movementSpeed * direction * Time.deltaTime * dist * -1;
+                rigidbody.AddForce(movementSpeed * direction * dist);
             }
         }
-        
-        rigidbody.MovePosition(translation);
+
+        // update the rotation. Slerp will go to the desired location smoothly
+        rigidbody.MoveRotation(Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(toLook), 50 * Time.deltaTime));
+
+        // we reduce the velocity each update
+        rigidbody.velocity = rigidbody.velocity * 0.9f;
     }
+
 }
