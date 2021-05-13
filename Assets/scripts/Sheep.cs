@@ -58,7 +58,7 @@ public class Sheep : MonoBehaviour
         rigidbody.MoveRotation(
             Quaternion.Slerp(
                 transform.rotation, 
-                Quaternion.LookRotation(toLook), 
+                Quaternion.LookRotation(new Vector3(toLook.x, 0, toLook.z)), 
                 rotationSpeed * Time.deltaTime
                 )
             );
