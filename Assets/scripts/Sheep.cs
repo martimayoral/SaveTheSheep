@@ -10,6 +10,9 @@ public class Sheep : MonoBehaviour
     public float playerRepeelDistance;
     Rigidbody rigidbody;
 
+    [HideInInspector]
+    public bool reduceVelocity = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -64,7 +67,8 @@ public class Sheep : MonoBehaviour
             );
 
         // we reduce the velocity each update
-        rigidbody.velocity = rigidbody.velocity * 0.9f;
+        if(reduceVelocity)
+            rigidbody.velocity = rigidbody.velocity * 0.9f;
     }
 
 }
