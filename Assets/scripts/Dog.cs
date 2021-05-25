@@ -6,6 +6,7 @@ public class Dog : MonoBehaviour
 {
     public GameObject player;
     public float interpolationFactior = 0.1f;
+    public float minDistance;
 
     // Start is called before the first frame update
     void Start()
@@ -16,7 +17,10 @@ public class Dog : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.LookAt(player.transform.position);
-        transform.position += (player.transform.position - transform.position) * interpolationFactior;
+        if (Mathf.Abs(player.transform.position.magnitude - transform.position.magnitude) > minDistance)
+        {
+            transform.LookAt(player.transform.position);
+            transform.position += (player.transform.position - transform.position) * interpolationFactior;
+        }
     }
 }

@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   interpolationFactior: 0.1
+  minDistance: 1
 --- !u!54 &641722240
 Rigidbody:
   m_ObjectHideFlags: 0

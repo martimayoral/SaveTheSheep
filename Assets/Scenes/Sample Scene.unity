@@ -1580,6 +1580,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 156bf59189d267a4196af234d383e0b6, type: 2}
+    - target: {fileID: 4215357243163199266, guid: cd1cb5635f8dbe649adff6525a31cfd3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6056536772609992180, guid: cd1cb5635f8dbe649adff6525a31cfd3, type: 3}
     - {fileID: 686605942, guid: cd1cb5635f8dbe649adff6525a31cfd3, type: 3}
@@ -4939,7 +4944,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1116926826
 Transform:
   m_ObjectHideFlags: 0
@@ -8287,6 +8292,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Dog
+      objectReference: {fileID: 0}
+    - target: {fileID: 7745078225656410355, guid: 83b2c9678449cb643a58303fb7f8c09a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8988514419338253014, guid: 83b2c9678449cb643a58303fb7f8c09a,
         type: 3}
