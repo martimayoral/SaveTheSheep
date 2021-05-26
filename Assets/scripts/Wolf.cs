@@ -4,39 +4,24 @@ using UnityEngine;
 
 public class Wolf : MonoBehaviour
 {
-    [SerializeField] [Range(0.0f, 4.0f)] float wolfSpeed;
-    [SerializeField] Vector3[] wolfPositions;
 
-    private int indexPos = 0;
-
-    private int numberOfPositions;
-
-    private float time = 0.0f;
-    Rigidbody rigidbody;
-
+    private float timerCounter = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody>();
-
-        numberOfPositions = wolfPositions.Length;
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 toLook = wolfPositions[indexPos];
-        transform.position = Vector3.Lerp(transform.position, wolfPositions[indexPos], wolfSpeed * Time.deltaTime);
+        timerCounter += Time.deltaTime * 0.5f;
 
-        transform.LookAt(new Vector3(toLook.x, 0, toLook.z));
+        float x = 50 + Mathf.Cos(timerCounter) * 35;
+        float y = 0;
+        float z = 37 + Mathf.Sin(timerCounter) * 20;
 
-        time = Mathf.Lerp(time, 1.0f, wolfSpeed * Time.deltaTime);
-        if (time > .9f)
-        {
-            time = 0.0f;
-            indexPos = (indexPos + 1) % numberOfPositions;
-        }
+        transform.position = new Vector3(x, y, z);
     }
 }
