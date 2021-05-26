@@ -27,6 +27,8 @@ public class Wolf : MonoBehaviour
 
             Vector3 nextPoint = new Vector3(x, y, z);
 
+            transform.LookAt(nextPoint);
+
             transform.position = Vector3.Lerp(transform.position, nextPoint, Time.deltaTime);
 
         } else
