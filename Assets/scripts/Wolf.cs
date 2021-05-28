@@ -10,9 +10,11 @@ public class Wolf : MonoBehaviour
         inside,
         selecting,
         hunting,
-        leaving
+        leaving,
+        grabed
     }
     private State state;
+    private State lastState;
 
     private float toInside;
     private float toHunt;
@@ -21,7 +23,12 @@ public class Wolf : MonoBehaviour
 
     public GameObject Sheeps;
 
-    public float speed = 50.0f;
+    private GameObject bluePlayer;
+    private GameObject redPlayer;
+
+    public float speed = .8f;
+    public float minPlayerDistance;
+    public float grabDistance;
 
     private void reset()
     {
@@ -32,6 +39,9 @@ public class Wolf : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        bluePlayer = GameObject.Find("Red Player");
+        redPlayer = GameObject.Find("Blue Player");
+
         state = State.outside;
         reset();
     }
@@ -51,7 +61,7 @@ public class Wolf : MonoBehaviour
 
         transform.LookAt(nextPoint);
 
-        transform.position = Vector3.Lerp(transform.position, nextPoint, Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, nextPoint, Time.deltaTime * speed);
 
         if (Time.time > toHunt) state = State.selecting;
     }
@@ -68,9 +78,9 @@ public class Wolf : MonoBehaviour
     {
         if (!selectedSheep) state = State.selecting;
 
-        float distance = Vector3.Distance(selectedSheep.transform.position, transform.position);
-        transform.position = Vector3.Lerp(transform.position, selectedSheep.transform.position, (Time.deltaTime * speed) / distance);
+        transform.position = Vector3.Lerp(transform.position, selectedSheep.transform.position, Time.deltaTime);
 
+        float distance = Vector3.Distance(selectedSheep.transform.position, transform.position);
         if (distance < 0.5f)
         {
             Sheep sheep = selectedSheep.GetComponent<Sheep>();
@@ -84,14 +94,42 @@ public class Wolf : MonoBehaviour
     void stateLeaving()
     {
         Vector3 target = new Vector3(0.0f, 0.0f, 0.0f);
-        float distance = Vector3.Distance(target, transform.position);
-        transform.position = Vector3.Lerp(transform.position, target, (Time.deltaTime * speed) / distance);
+        transform.position = Vector3.Lerp(transform.position, target, Time.deltaTime * speed);
         selectedSheep.transform.position = transform.position;
+    }
+
+    void stateGrabed()
+    {
+        transform.position = redPlayer.transform.position + (bluePlayer.transform.position - redPlayer.transform.position) / 2;
+    }
+
+    void checkPlayerInteraction(){
+        float playerDistance = Vector3.Distance(redPlayer.transform.position, bluePlayer.transform.position);
+
+        float blueWolfDistance = Vector3.Distance(transform.position, bluePlayer.transform.position);
+
+        float redWolfDistance = Vector3.Distance(redPlayer.transform.position, transform.position);
+
+        if(playerDistance < minPlayerDistance && blueWolfDistance < grabDistance && redWolfDistance < grabDistance)
+        {
+            if (state != State.grabed)
+            {
+                setGrabState();
+            }
+        } else
+        {
+            if(state == State.grabed)
+            {
+                setNonGrabState();
+            }
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        checkPlayerInteraction();
+            
         switch (state)
         {
             case State.outside:
@@ -109,6 +147,20 @@ public class Wolf : MonoBehaviour
             case State.leaving:
                 stateLeaving();
                 break;
+            case State.grabed:
+                stateGrabed();
+                break;
         }
+    }
+
+    void setGrabState()
+    {
+        lastState = state;
+        state = State.grabed;
+    }
+
+    void setNonGrabState()
+    {
+        state = lastState;
     }
 }

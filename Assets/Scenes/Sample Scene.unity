@@ -828,6 +828,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Sheeps: {fileID: 483590456}
+  speed: 0.5
+  minPlayerDistance: 20
+  grabDistance: 10
 --- !u!54 &197973897
 Rigidbody:
   m_ObjectHideFlags: 0
