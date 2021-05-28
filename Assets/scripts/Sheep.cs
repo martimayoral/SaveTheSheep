@@ -13,6 +13,7 @@ public class Sheep : MonoBehaviour
 
     [HideInInspector]
     public bool reduceVelocity = true;
+    private bool sheepHunted;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +23,7 @@ public class Sheep : MonoBehaviour
         players.Add(GameObject.Find("Blue Player"));
 
         wolf = GameObject.Find("Wolf");
+        sheepHunted = false;
     }
 
     void move(Vector3 desiredPosition)
@@ -59,14 +61,13 @@ public class Sheep : MonoBehaviour
         return toLook;
     }
 
-
-    // Update is called once per frame
-    void FixedUpdate()
+    void FreeSheepBehaviour()
     {
         // if nothing happens, look forward
-        Vector3 toLook =  this.transform.forward * 10;
+        Vector3 toLook = this.transform.forward * 10;
 
-        foreach (GameObject player in players ){
+        foreach (GameObject player in players)
+        {
             toLook += repeel(player, playerRepeelDistance);
         }
         toLook += repeel(wolf, playerRepeelDistance * 0.5f);
@@ -74,15 +75,37 @@ public class Sheep : MonoBehaviour
         // update the rotation. Slerp will go to the desired location smoothly
         rigidbody.MoveRotation(
             Quaternion.Slerp(
-                transform.rotation, 
-                Quaternion.LookRotation(new Vector3(toLook.x, 0, toLook.z)), 
+                transform.rotation,
+                Quaternion.LookRotation(new Vector3(toLook.x, 0, toLook.z)),
                 rotationSpeed * Time.deltaTime
                 )
             );
 
         // we reduce the velocity each update
-        if(reduceVelocity)
+        if (reduceVelocity)
             rigidbody.velocity = rigidbody.velocity * 0.9f;
+    }
+
+    void HuntedSheepBehaviour()
+    {
+
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        if (sheepHunted) HuntedSheepBehaviour();
+        else FreeSheepBehaviour();
+    }
+
+    void SetSheepHunted()
+    {
+        sheepHunted = true;
+    }
+
+    bool GetSheepHunted()
+    {
+        return sheepHunted;
     }
 
 }

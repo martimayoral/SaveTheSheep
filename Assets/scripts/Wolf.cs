@@ -8,6 +8,7 @@ public class Wolf : MonoBehaviour
     {
         outside,
         inside,
+        selecting,
         hunting,
         leaving
     }
@@ -16,7 +17,11 @@ public class Wolf : MonoBehaviour
     private float toInside;
     private float toHunt;
 
+    private GameObject selectedSheep;
+
     public GameObject Sheeps;
+
+    public float speed = 50.0f;
 
     private void reset()
     {
@@ -48,17 +53,24 @@ public class Wolf : MonoBehaviour
 
         transform.position = Vector3.Lerp(transform.position, nextPoint, Time.deltaTime);
 
-        if (Time.time > toHunt) state = State.hunting;
+        if (Time.time > toHunt) state = State.selecting;
+    }
+
+    void stateSelecting()
+    {
+
+        selectedSheep = Sheeps.transform.GetChild(Random.Range(0,Sheeps.transform.childCount-1)).gameObject;
+
+        state = State.hunting;
     }
 
     void stateHunting()
     {
-        GameObject sheep;
-        sheep = Sheeps.transform.GetChild(Random.Range(0,Sheeps.transform.childCount-1)).gameObject;
+        if (!selectedSheep) state = State.selecting;
 
-        sheep.transform.position = new Vector3(50, 50, 50);
+        float distance = Vector3.Distance(selectedSheep.transform.position, transform.position);
 
-        state = State.leaving;
+        transform.position = Vector3.Lerp(transform.position, selectedSheep.transform.position, (Time.deltaTime * speed) / distance);
     }
 
     // Update is called once per frame
@@ -71,6 +83,9 @@ public class Wolf : MonoBehaviour
                 break;
             case State.inside:
                 stateInside();
+                break;
+            case State.selecting:
+                stateSelecting();
                 break;
             case State.hunting:
                 stateHunting();
