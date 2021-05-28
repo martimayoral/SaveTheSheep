@@ -17,7 +17,7 @@ public class Dog : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Mathf.Abs(player.transform.position.magnitude - transform.position.magnitude) > minDistance)
+        if (Mathf.Abs(Vector3.Distance(player.transform.position, transform.position)) > minDistance)
         {
             transform.LookAt(player.transform.position);
             transform.position += (player.transform.position - transform.position) * interpolationFactior;
