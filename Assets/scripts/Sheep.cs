@@ -98,14 +98,9 @@ public class Sheep : MonoBehaviour
         else FreeSheepBehaviour();
     }
 
-    void SetSheepHunted()
+    public void changeHuntedState()
     {
-        sheepHunted = true;
-    }
-
-    bool GetSheepHunted()
-    {
-        return sheepHunted;
+        sheepHunted = !sheepHunted;
     }
 
 }

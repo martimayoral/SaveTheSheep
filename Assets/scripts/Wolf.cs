@@ -69,8 +69,24 @@ public class Wolf : MonoBehaviour
         if (!selectedSheep) state = State.selecting;
 
         float distance = Vector3.Distance(selectedSheep.transform.position, transform.position);
-
         transform.position = Vector3.Lerp(transform.position, selectedSheep.transform.position, (Time.deltaTime * speed) / distance);
+
+        if (distance < 0.5f)
+        {
+            Sheep sheep = selectedSheep.GetComponent<Sheep>();
+            sheep.changeHuntedState();
+
+            state = State.leaving;
+        }
+
+    }
+
+    void stateLeaving()
+    {
+        Vector3 target = new Vector3(0.0f, 0.0f, 0.0f);
+        float distance = Vector3.Distance(target, transform.position);
+        transform.position = Vector3.Lerp(transform.position, target, (Time.deltaTime * speed) / distance);
+        selectedSheep.transform.position = transform.position;
     }
 
     // Update is called once per frame
@@ -91,6 +107,7 @@ public class Wolf : MonoBehaviour
                 stateHunting();
                 break;
             case State.leaving:
+                stateLeaving();
                 break;
         }
     }
