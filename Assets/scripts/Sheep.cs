@@ -14,6 +14,7 @@ public class Sheep : MonoBehaviour
     [HideInInspector]
     public bool reduceVelocity = true;
     private bool sheepHunted;
+    private bool sheepInGoal;
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +25,7 @@ public class Sheep : MonoBehaviour
 
         wolf = GameObject.Find("Wolf");
         sheepHunted = false;
+        sheepInGoal = false;
     }
 
     void move(Vector3 desiredPosition)
@@ -95,12 +97,28 @@ public class Sheep : MonoBehaviour
     void FixedUpdate()
     {
         if (sheepHunted) HuntedSheepBehaviour();
+        else if (sheepInGoal) return;
         else FreeSheepBehaviour();
     }
 
     public void changeHuntedState()
     {
         sheepHunted = !sheepHunted;
+    }
+
+    public bool getHuntedState()
+    {
+        return sheepHunted;
+    }
+
+    public void setSheepInGoal()
+    {
+        sheepInGoal = true;
+    }
+
+    public bool isInGoal()
+    {
+        return sheepInGoal;
     }
 
 }

@@ -76,14 +76,19 @@ public class Wolf : MonoBehaviour
 
     void stateHunting()
     {
-        if (!selectedSheep) state = State.selecting;
+
+        Sheep sheep = selectedSheep.GetComponent<Sheep>();
+        if (sheep.isInGoal() == true)
+        {
+            state = State.selecting;
+            return;
+        }
 
         transform.position = Vector3.Lerp(transform.position, selectedSheep.transform.position, Time.deltaTime);
 
         float distance = Vector3.Distance(selectedSheep.transform.position, transform.position);
         if (distance < 0.5f)
         {
-            Sheep sheep = selectedSheep.GetComponent<Sheep>();
             sheep.changeHuntedState();
 
             state = State.leaving;
@@ -95,12 +100,16 @@ public class Wolf : MonoBehaviour
     {
         Vector3 target = new Vector3(0.0f, 0.0f, 0.0f);
         transform.position = Vector3.Lerp(transform.position, target, Time.deltaTime * speed);
-        selectedSheep.transform.position = transform.position;
+
+        Sheep sheep = selectedSheep.GetComponent<Sheep>();
+
+        sheep.transform.position = transform.position;
     }
 
     void stateGrabed()
     {
         transform.position = redPlayer.transform.position + (bluePlayer.transform.position - redPlayer.transform.position) / 2;
+
     }
 
     void checkPlayerInteraction(){
@@ -115,6 +124,11 @@ public class Wolf : MonoBehaviour
             if (state != State.grabed)
             {
                 setGrabState();
+                Sheep sheep = selectedSheep.GetComponent<Sheep>();
+                if (sheep.getHuntedState())
+                {
+                    sheep.changeHuntedState();
+                }
             }
         } else
         {
@@ -161,6 +175,6 @@ public class Wolf : MonoBehaviour
 
     void setNonGrabState()
     {
-        state = lastState;
+        state = (lastState == State.leaving) ? State.hunting : lastState;
     }
 }
