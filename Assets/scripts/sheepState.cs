@@ -20,7 +20,7 @@ public class sheepState : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (killedSheep <= 3)
+        if (killedSheep >= 3)
         {
             Debug.LogWarning("GAME LOSE");
         }

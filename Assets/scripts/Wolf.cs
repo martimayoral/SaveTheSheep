@@ -55,7 +55,11 @@ public class Wolf : MonoBehaviour
 
     void stateOutside()
     {
-        if (Time.time > toInside) state = State.inside;
+        if (Time.time > toInside)
+        {
+            SoundManager.Instance.PlayWolfClip();
+            state = State.inside;
+        }
     }
 
     void move(Vector3 target)
@@ -105,6 +109,7 @@ public class Wolf : MonoBehaviour
         float distance = Vector3.Distance(selectedSheep.transform.position, transform.position);
         if (distance < 0.5f)
         {
+            SoundManager.Instance.PlaySheepClip();
             sheep.changeHuntedState();
 
             state = State.leaving;
