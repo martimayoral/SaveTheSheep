@@ -15,7 +15,6 @@ public class Goal : MonoBehaviour
             Sheep sheep = other.gameObject.GetComponent<Sheep>();
             sheep.setSheepInGoal();
             sheep.reduceVelocity = false;
-            other.gameObject.GetComponent<Rigidbody>().AddForce(afterCollisionDirection);
             Destroy(other.gameObject, afterCollisionAliveTime); // 3
         }
 

@@ -11,7 +11,8 @@ public class Wolf : MonoBehaviour
         selecting,
         hunting,
         leaving,
-        grabed
+        grabed,
+        reseting
     }
     private State state;
     private State lastState;
@@ -23,32 +24,44 @@ public class Wolf : MonoBehaviour
 
     public GameObject Sheeps;
 
-    private GameObject bluePlayer;
-    private GameObject redPlayer;
+    public GameObject bluePlayer;
+    public GameObject redPlayer;
 
     public float speed = .8f;
     public float minPlayerDistance;
     public float grabDistance;
 
+    public GameObject[] exits;
+    private Vector3 selectedExit;
+
+    private Vector3 startingPosition;
+
     private void reset()
     {
+        state = State.outside;
         toInside = Time.time + Random.Range(3,5) ;
         toHunt = toInside + Random.Range(10, 15);
+        transform.position = startingPosition;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        bluePlayer = GameObject.Find("Red Player");
-        redPlayer = GameObject.Find("Blue Player");
-
         state = State.outside;
+        startingPosition = transform.position;
+
         reset();
     }
 
     void stateOutside()
     {
         if (Time.time > toInside) state = State.inside;
+    }
+
+    void move(Vector3 target)
+    {
+        transform.position += (target - transform.position).normalized * speed;
+        transform.LookAt(target);
     }
 
     void stateInside()
@@ -61,7 +74,7 @@ public class Wolf : MonoBehaviour
 
         transform.LookAt(nextPoint);
 
-        transform.position = Vector3.Lerp(transform.position, nextPoint, Time.deltaTime * speed);
+        transform.position = Vector3.Lerp(transform.position, nextPoint, Time.deltaTime * 0.5f);
 
         if (Time.time > toHunt) state = State.selecting;
     }
@@ -70,10 +83,13 @@ public class Wolf : MonoBehaviour
     {
 
         selectedSheep = Sheeps.transform.GetChild(Random.Range(0,Sheeps.transform.childCount-1)).gameObject;
+        selectedExit = exits[Random.Range(0, exits.Length)].transform.position;
 
+        selectedSheep.GetComponent<Sheep>().mira.SetActive(true);
         state = State.hunting;
     }
 
+    // perseguint a la ovella
     void stateHunting()
     {
 
@@ -84,7 +100,7 @@ public class Wolf : MonoBehaviour
             return;
         }
 
-        transform.position = Vector3.Lerp(transform.position, selectedSheep.transform.position, Time.deltaTime);
+        move(selectedSheep.transform.position);
 
         float distance = Vector3.Distance(selectedSheep.transform.position, transform.position);
         if (distance < 0.5f)
@@ -93,19 +109,23 @@ public class Wolf : MonoBehaviour
 
             state = State.leaving;
         }
-
     }
 
+    // ha agafat a la ovella
     void stateLeaving()
     {
-        Vector3 target = new Vector3(0.0f, 0.0f, 0.0f);
-        transform.position = Vector3.Lerp(transform.position, target, Time.deltaTime * speed);
+        if (Vector3.Distance(transform.position, selectedExit) < 2)
+        {
+            reset();
+            selectedSheep.GetComponent<Sheep>().killSheep();
+            Destroy(selectedSheep.gameObject);
+        }
 
-        Sheep sheep = selectedSheep.GetComponent<Sheep>();
+        move(selectedExit);
 
-        sheep.transform.position = transform.position;
     }
 
+    // agafat pel jugadors
     void stateGrabed()
     {
         transform.position = redPlayer.transform.position + (bluePlayer.transform.position - redPlayer.transform.position) / 2;
@@ -121,13 +141,16 @@ public class Wolf : MonoBehaviour
 
         if(playerDistance < minPlayerDistance && blueWolfDistance < grabDistance && redWolfDistance < grabDistance)
         {
-            if (state != State.grabed)
+            if (state != State.grabed && state != State.reseting)
             {
                 setGrabState();
-                Sheep sheep = selectedSheep.GetComponent<Sheep>();
-                if (sheep.getHuntedState())
+                if (selectedSheep)
                 {
-                    sheep.changeHuntedState();
+                    Sheep sheep = selectedSheep.GetComponent<Sheep>();
+                    if (sheep.getHuntedState())
+                    {
+                        sheep.changeHuntedState();
+                    }
                 }
             }
         } else
@@ -137,6 +160,23 @@ public class Wolf : MonoBehaviour
                 setNonGrabState();
             }
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Goal") && state == State.grabed) // 2
+        {
+            state = State.reseting;
+            if(selectedSheep)
+                selectedSheep.GetComponent<Sheep>().mira.SetActive(false);
+        }
+    }
+
+    void stateReseting()
+    {
+        if (Vector3.Distance(startingPosition, transform.position) < 3)
+            reset();
+        move(startingPosition);
     }
 
     // Update is called once per frame
@@ -163,6 +203,9 @@ public class Wolf : MonoBehaviour
                 break;
             case State.grabed:
                 stateGrabed();
+                break;
+            case State.reseting:
+                stateReseting();
                 break;
         }
     }

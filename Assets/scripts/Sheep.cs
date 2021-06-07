@@ -16,6 +16,9 @@ public class Sheep : MonoBehaviour
     private bool sheepHunted;
     private bool sheepInGoal;
 
+    public GameObject mira;
+    private Vector3 goalPos;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +29,11 @@ public class Sheep : MonoBehaviour
         wolf = GameObject.Find("Wolf");
         sheepHunted = false;
         sheepInGoal = false;
+
+        goalPos = GameObject.Find("Goal").transform.position;
+
+
+        mira = transform.GetChild(1).gameObject;
     }
 
     void move(Vector3 desiredPosition)
@@ -41,6 +49,7 @@ public class Sheep : MonoBehaviour
 
     Vector3 repeel(GameObject player, float distance)
     {
+
         Vector3 toLook = Vector3.zero;
 
         // vector from player and sheep
@@ -90,20 +99,26 @@ public class Sheep : MonoBehaviour
 
     void HuntedSheepBehaviour()
     {
-
+        transform.position = wolf.transform.position + wolf.transform.forward * 10;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         if (sheepHunted) HuntedSheepBehaviour();
-        else if (sheepInGoal) return;
+        else if (sheepInGoal) {
+            transform.position += (goalPos - transform.position).normalized;
+            transform.LookAt(new Vector3(50,0,-100));
+            return;
+        }
+        else if (mira.activeSelf) return;
         else FreeSheepBehaviour();
     }
 
     public void changeHuntedState()
     {
         sheepHunted = !sheepHunted;
+        Debug.Log(sheepHunted ? "Sheep hunted" : "Sheep dishunted");
     }
 
     public bool getHuntedState()
@@ -111,9 +126,15 @@ public class Sheep : MonoBehaviour
         return sheepHunted;
     }
 
+    public void killSheep()
+    {
+        transform.parent.GetComponent<sheepState>().killedSheep++;
+    }
+
     public void setSheepInGoal()
     {
         sheepInGoal = true;
+        transform.parent.GetComponent<sheepState>().savedSheep++;
     }
 
     public bool isInGoal()

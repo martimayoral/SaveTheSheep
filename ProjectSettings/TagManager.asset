@@ -22,6 +22,7 @@ TagManager:
   - Reward
   - objectiveTriangle
   - Sheep
+  - Goal
   layers:
   - Default
   - TransparentFX
