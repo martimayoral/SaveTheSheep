@@ -5171,7 +5171,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1155126772
 Transform:
   m_ObjectHideFlags: 0
@@ -5186,7 +5186,7 @@ Transform:
   - {fileID: 2071485349}
   - {fileID: 1222244607}
   m_Father: {fileID: 1759491659}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1168528285 stripped
 Transform:
@@ -5936,12 +5936,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1306265223}
   m_Layer: 0
-  m_Name: GameOver (1)
+  m_Name: GameWin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1306265223
 Transform:
   m_ObjectHideFlags: 0
@@ -5956,7 +5956,7 @@ Transform:
   - {fileID: 935441260}
   - {fileID: 2094722634}
   m_Father: {fileID: 1759491659}
-  m_RootOrder: 4
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1306629416 stripped
 Transform:
@@ -6938,7 +6938,7 @@ Transform:
   - {fileID: 136201085}
   - {fileID: 1203521592}
   m_Father: {fileID: 1759491659}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1483331266
 PrefabInstance:
@@ -7397,14 +7397,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1580473440}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1505537911}
   - {fileID: 1016945620}
   m_Father: {fileID: 1759491659}
-  m_RootOrder: 1
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1584988124
 PrefabInstance:
@@ -8172,14 +8172,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1759491658}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 346174758}
-  - {fileID: 1580473441}
-  - {fileID: 1473597885}
-  - {fileID: 1155126772}
   - {fileID: 1306265223}
+  - {fileID: 1155126772}
+  - {fileID: 1473597885}
+  - {fileID: 1580473441}
   m_Father: {fileID: 1444779882}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8207,6 +8207,11 @@ MonoBehaviour:
   spawn: {fileID: 1219370757}
   sheepParent: {fileID: 483590457}
   wolf: {fileID: 630918200}
+  win: {fileID: 1306265222}
+  lose: {fileID: 346174757}
+  t1: {fileID: 1580473440}
+  t2: {fileID: 1473597884}
+  t3: {fileID: 1155126771}
   stage: 0
 --- !u!4 &1766050193 stripped
 Transform:

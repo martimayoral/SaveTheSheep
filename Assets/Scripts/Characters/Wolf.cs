@@ -131,6 +131,8 @@ public class Wolf : MonoBehaviour
 
     void StateSelectSheep()
     {
+        if (Sheeps.transform.childCount == 0)
+            return;
 
         selectedSheep = Sheeps.transform.GetChild(Random.Range(0,Sheeps.transform.childCount-1)).gameObject;
         selectedExit = exits[Random.Range(0, exits.Length - 1)].transform.position;
