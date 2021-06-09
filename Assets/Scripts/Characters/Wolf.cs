@@ -27,7 +27,7 @@ public class Wolf : MonoBehaviour
     public GameObject bluePlayer;
     public GameObject redPlayer;
 
-    public float speed = .8f;
+    public float speed;
     public float minPlayerDistance;
     public float grabDistance;
 
@@ -39,7 +39,7 @@ public class Wolf : MonoBehaviour
     private void reset()
     {
         state = State.outside;
-        toInside = Time.time + Random.Range(3,5) ;
+        toInside = Time.time + Random.Range(10, 15) ;
         toHunt = toInside + Random.Range(10, 15);
         transform.position = startingPosition;
     }
@@ -64,7 +64,7 @@ public class Wolf : MonoBehaviour
 
     void move(Vector3 target)
     {
-        transform.position += (target - transform.position).normalized * speed;
+        transform.position += (target - transform.position).normalized * speed * Time.deltaTime;
         transform.LookAt(target);
     }
 

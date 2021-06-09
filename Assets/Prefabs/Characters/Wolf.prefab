@@ -49,7 +49,7 @@ MonoBehaviour:
   Sheeps: {fileID: 0}
   bluePlayer: {fileID: 0}
   redPlayer: {fileID: 0}
-  speed: 0.3
+  speed: 20
   minPlayerDistance: 25
   grabDistance: 15
   exits:

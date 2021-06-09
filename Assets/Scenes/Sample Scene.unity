@@ -10300,6 +10300,11 @@ PrefabInstance:
       propertyPath: exits.Array.data[4]
       value: 
       objectReference: {fileID: 324404497}
+    - target: {fileID: 5136766784029189272, guid: ebd48e2a126084bc2bf909b5692e07be,
+        type: 3}
+      propertyPath: speed
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ebd48e2a126084bc2bf909b5692e07be, type: 3}
 --- !u!1001 &6769992083713527169
