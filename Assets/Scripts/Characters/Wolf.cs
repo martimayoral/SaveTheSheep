@@ -17,6 +17,7 @@ public class Wolf : MonoBehaviour
 
     private enum State
     {
+        Start,
         WaitOutside,
         EnterAndMoveInCircle,
         SelectSheep,
@@ -40,7 +41,7 @@ public class Wolf : MonoBehaviour
     void Start()
     {
         startingPosition = transform.position;
-        ResetCycle();
+        state = State.Start;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -80,10 +81,12 @@ public class Wolf : MonoBehaviour
             case State.RestaringCycle:
                 StateRestartingCycle();
                 break;
+            default: 
+                break;
         }
     }
 
-    private void ResetCycle()
+    public void ResetCycle()
     {
         state = State.WaitOutside;
         toInside = Time.time + Random.Range(10, 15) ;
@@ -129,7 +132,7 @@ public class Wolf : MonoBehaviour
         selectedExit = exits[Random.Range(0, exits.Length - 1)].transform.position;
 
         Sheep sheep = selectedSheep.GetComponent<Sheep>();
-        if (sheep.IsInGoal()) return;
+        if (sheep) if(sheep.IsInGoal()) return;
 
         sheep.mira.SetActive(true);
         state = State.HuntSelectedSheep;

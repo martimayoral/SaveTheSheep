@@ -7,17 +7,27 @@ public class Sheep : MonoBehaviour
     public float movementSpeed;
     public float rotationSpeed;
     public float playerRepeelDistance;
+    private GameObject sheepsStartPositions;
 
     [HideInInspector]
     public bool reduceVelocity = true;
 
     public GameObject mira;
+    private Vector3 nextPos;
 
     private List<GameObject> players = new List<GameObject>(); 
     private GameObject wolf; 
 
     private bool sheepHunted;
     private bool sheepInGoal;
+    public Inits sheepInit;
+    public enum Inits
+    {
+        commun,
+        chosing,
+        personal,
+        play
+    }
     
     private Vector3 goalPos;
     private Rigidbody rigidBody;
@@ -31,23 +41,19 @@ public class Sheep : MonoBehaviour
         wolf = GameObject.Find("Wolf");
         sheepHunted = false;
         sheepInGoal = false;
+        sheepInit = Inits.commun;
 
         goalPos = GameObject.Find("Goal").transform.position;
 
 
         mira = transform.GetChild(1).gameObject;
+        sheepsStartPositions = GameObject.Find("SheepStartPositions").gameObject;
     }
 
     void Move(Vector3 desiredPosition)
     {
-        Vector3 direction = (desiredPosition - transform.position);
-
-        Ray ray = new Ray(transform.position, direction);
-        RaycastHit hit;
-        if (!Physics.Raycast(ray, out hit, direction.magnitude))
-            rigidBody.MovePosition(desiredPosition);
-        else
-            rigidBody.MovePosition(hit.point);
+        transform.position += (desiredPosition - transform.position).normalized * movementSpeed * 1.8f * Time.deltaTime;
+        transform.LookAt(desiredPosition);
     }
 
     Vector3 Repeel(GameObject player, float distance)
@@ -68,7 +74,7 @@ public class Sheep : MonoBehaviour
         if (dist > 0)
         {
             // translation to aply
-            toLook += movementSpeed * direction * Time.deltaTime * dist * -1;
+            toLook += movementSpeed * direction * Time.deltaTime * dist * 1;
             rigidBody.AddForce(movementSpeed * direction * dist);
         }
 
@@ -108,13 +114,42 @@ public class Sheep : MonoBehaviour
 
     void GoalSheepBehaviour()
     {
-        transform.position += (goalPos - transform.position).normalized;
-        transform.LookAt(new Vector3(50, 0, -100));
+        Move(goalPos);
+    }
+
+    void InitBehaviour()
+    {
+        Inits next;
+        switch (sheepInit)
+        {
+            case Inits.commun:
+                next = Inits.chosing;
+                nextPos = new Vector3(50, 0, 50);
+                break;
+            case Inits.chosing:
+                next = Inits.personal;
+                sheepInit = Inits.personal;
+                nextPos = sheepsStartPositions.transform.GetChild(Random.Range(0, sheepsStartPositions.transform.childCount)).position;
+                nextPos += new Vector3(Random.Range(-3,3),0, Random.Range(-3, 3));
+                break;
+            case Inits.personal:
+                next = Inits.play;
+                break;
+            default:
+                next = Inits.commun;
+                break;
+        }
+
+        if (Vector3.Distance(transform.position, nextPos) < 5)
+            sheepInit = next;
+
+        Move(nextPos);
     }
 
     void FixedUpdate()
     {
-        if (sheepHunted) HuntedSheepBehaviour();
+        if (sheepInit != Inits.play) InitBehaviour();
+        else if (sheepHunted) HuntedSheepBehaviour();
         else if (sheepInGoal) GoalSheepBehaviour();
         else if (mira.activeSelf) return;
         else FreeSheepBehaviour();
@@ -132,13 +167,13 @@ public class Sheep : MonoBehaviour
 
     public void KillSheep()
     {
-        transform.parent.GetComponent<sheepState>().killedSheep++;
+        GameState.Instance.killedSheep++;
     }
 
     public void SetSheepInGoal()
     {
         sheepInGoal = true;
-        transform.parent.GetComponent<sheepState>().savedSheep++;
+        GameState.Instance.savedSheep++;
     }
 
     public bool IsInGoal()

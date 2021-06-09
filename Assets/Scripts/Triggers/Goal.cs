@@ -10,7 +10,7 @@ public class Goal : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) 
     {
-        if (other.CompareTag(tagFilter)) 
+        if (other.CompareTag(tagFilter) && GameState.Instance.stage == GameState.Stage.playing) 
         {
             Sheep sheep = other.gameObject.GetComponent<Sheep>();
             sheep.SetSheepInGoal();
