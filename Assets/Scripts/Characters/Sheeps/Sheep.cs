@@ -6,23 +6,25 @@ public class Sheep : MonoBehaviour
 {
     public float movementSpeed;
     public float rotationSpeed;
-    private List<GameObject> players = new List<GameObject>(); // 5
-    private GameObject wolf; // 5
     public float playerRepeelDistance;
-    Rigidbody rigidbody;
 
     [HideInInspector]
     public bool reduceVelocity = true;
-    private bool sheepHunted;
-    private bool sheepInGoal;
 
     public GameObject mira;
-    private Vector3 goalPos;
 
-    // Start is called before the first frame update
+    private List<GameObject> players = new List<GameObject>(); 
+    private GameObject wolf; 
+
+    private bool sheepHunted;
+    private bool sheepInGoal;
+    
+    private Vector3 goalPos;
+    private Rigidbody rigidBody;
+
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody>();
+        rigidBody = GetComponent<Rigidbody>();
         players.Add(GameObject.Find("Red Player"));
         players.Add(GameObject.Find("Blue Player"));
 
@@ -36,24 +38,25 @@ public class Sheep : MonoBehaviour
         mira = transform.GetChild(1).gameObject;
     }
 
-    void move(Vector3 desiredPosition)
+    void Move(Vector3 desiredPosition)
     {
-        Vector3 direction = (desiredPosition - this.transform.position);
-        Ray ray = new Ray(this.transform.position, direction);
+        Vector3 direction = (desiredPosition - transform.position);
+
+        Ray ray = new Ray(transform.position, direction);
         RaycastHit hit;
         if (!Physics.Raycast(ray, out hit, direction.magnitude))
-            rigidbody.MovePosition(desiredPosition);
+            rigidBody.MovePosition(desiredPosition);
         else
-            rigidbody.MovePosition(hit.point);
+            rigidBody.MovePosition(hit.point);
     }
 
-    Vector3 repeel(GameObject player, float distance)
+    Vector3 Repeel(GameObject player, float distance)
     {
 
         Vector3 toLook = Vector3.zero;
 
         // vector from player and sheep
-        Vector3 vec = player.transform.position - this.transform.position;
+        Vector3 vec = player.transform.position - transform.position;
 
         // direction: vector normalized
         Vector3 direction = -vec.normalized;
@@ -66,7 +69,7 @@ public class Sheep : MonoBehaviour
         {
             // translation to aply
             toLook += movementSpeed * direction * Time.deltaTime * dist * -1;
-            rigidbody.AddForce(movementSpeed * direction * dist);
+            rigidBody.AddForce(movementSpeed * direction * dist);
         }
 
         return toLook;
@@ -75,16 +78,16 @@ public class Sheep : MonoBehaviour
     void FreeSheepBehaviour()
     {
         // if nothing happens, look forward
-        Vector3 toLook = this.transform.forward * 10;
+        Vector3 toLook = transform.forward * 10;
 
         foreach (GameObject player in players)
         {
-            toLook += repeel(player, playerRepeelDistance);
+            toLook += Repeel(player, playerRepeelDistance);
         }
-        toLook += repeel(wolf, playerRepeelDistance * 0.5f);
+        toLook += Repeel(wolf, playerRepeelDistance * 0.5f);
 
         // update the rotation. Slerp will go to the desired location smoothly
-        rigidbody.MoveRotation(
+        rigidBody.MoveRotation(
             Quaternion.Slerp(
                 transform.rotation,
                 Quaternion.LookRotation(new Vector3(toLook.x, 0, toLook.z)),
@@ -94,50 +97,51 @@ public class Sheep : MonoBehaviour
 
         // we reduce the velocity each update
         if (reduceVelocity)
-            rigidbody.velocity = rigidbody.velocity * 0.9f;
+            rigidBody.velocity = rigidBody.velocity * 0.9f;
     }
 
     void HuntedSheepBehaviour()
     {
+        // Grabbed by wolf
         transform.position = wolf.transform.position + wolf.transform.forward * 10;
     }
 
-    // Update is called once per frame
+    void GoalSheepBehaviour()
+    {
+        transform.position += (goalPos - transform.position).normalized;
+        transform.LookAt(new Vector3(50, 0, -100));
+    }
+
     void FixedUpdate()
     {
         if (sheepHunted) HuntedSheepBehaviour();
-        else if (sheepInGoal) {
-            transform.position += (goalPos - transform.position).normalized;
-            transform.LookAt(new Vector3(50,0,-100));
-            return;
-        }
+        else if (sheepInGoal) GoalSheepBehaviour();
         else if (mira.activeSelf) return;
         else FreeSheepBehaviour();
     }
 
-    public void changeHuntedState()
+    public void ChangeHuntedState()
     {
         sheepHunted = !sheepHunted;
-        Debug.Log(sheepHunted ? "Sheep hunted" : "Sheep dishunted");
     }
 
-    public bool getHuntedState()
+    public bool GetHuntedState()
     {
         return sheepHunted;
     }
 
-    public void killSheep()
+    public void KillSheep()
     {
         transform.parent.GetComponent<sheepState>().killedSheep++;
     }
 
-    public void setSheepInGoal()
+    public void SetSheepInGoal()
     {
         sheepInGoal = true;
         transform.parent.GetComponent<sheepState>().savedSheep++;
     }
 
-    public bool isInGoal()
+    public bool IsInGoal()
     {
         return sheepInGoal;
     }

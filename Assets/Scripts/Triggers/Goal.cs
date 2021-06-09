@@ -13,7 +13,7 @@ public class Goal : MonoBehaviour
         if (other.CompareTag(tagFilter)) // 2
         {
             Sheep sheep = other.gameObject.GetComponent<Sheep>();
-            sheep.setSheepInGoal();
+            sheep.SetSheepInGoal();
             sheep.reduceVelocity = false;
             Destroy(other.gameObject, afterCollisionAliveTime); // 3
         }

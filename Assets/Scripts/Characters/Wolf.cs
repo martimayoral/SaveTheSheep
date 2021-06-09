@@ -4,24 +4,6 @@ using UnityEngine;
 
 public class Wolf : MonoBehaviour
 {
-    private enum State
-    {
-        outside,
-        inside,
-        selecting,
-        hunting,
-        leaving,
-        grabed,
-        reseting
-    }
-    private State state;
-    private State lastState;
-
-    private float toInside;
-    private float toHunt;
-
-    private GameObject selectedSheep;
-
     public GameObject Sheeps;
 
     public GameObject bluePlayer;
@@ -32,13 +14,32 @@ public class Wolf : MonoBehaviour
     public float grabDistance;
 
     public GameObject[] exits;
+
+    private enum State
+    {
+        WaitOutside,
+        EnterAndMoveInCircle,
+        SelectSheep,
+        HuntSelectedSheep,
+        LeaveSceneWithHuntedSheep,
+        GrabbedByPlayers,
+        RestaringCicle
+    }
+    private State state;
+    private State lastState;
+
+    private float toInside;
+    private float toHunt;
+
+    private GameObject selectedSheep;
+
     private Vector3 selectedExit;
 
     private Vector3 startingPosition;
 
     private void reset()
     {
-        state = State.outside;
+        state = State.WaitOutside;
         toInside = Time.time + Random.Range(10, 15) ;
         toHunt = toInside + Random.Range(10, 15);
         transform.position = startingPosition;
@@ -47,9 +48,7 @@ public class Wolf : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        state = State.outside;
         startingPosition = transform.position;
-
         reset();
     }
 
@@ -58,7 +57,7 @@ public class Wolf : MonoBehaviour
         if (Time.time > toInside)
         {
             SoundManager.Instance.PlayWolfClip();
-            state = State.inside;
+            state = State.EnterAndMoveInCircle;
         }
     }
 
@@ -80,17 +79,17 @@ public class Wolf : MonoBehaviour
 
         transform.position = Vector3.Lerp(transform.position, nextPoint, Time.deltaTime * 0.5f);
 
-        if (Time.time > toHunt) state = State.selecting;
+        if (Time.time > toHunt) state = State.SelectSheep;
     }
 
     void stateSelecting()
     {
 
         selectedSheep = Sheeps.transform.GetChild(Random.Range(0,Sheeps.transform.childCount-1)).gameObject;
-        selectedExit = exits[Random.Range(0, exits.Length)].transform.position;
+        selectedExit = exits[Random.Range(0, exits.Length - 1)].transform.position;
 
         selectedSheep.GetComponent<Sheep>().mira.SetActive(true);
-        state = State.hunting;
+        state = State.HuntSelectedSheep;
     }
 
     // perseguint a la ovella
@@ -98,9 +97,9 @@ public class Wolf : MonoBehaviour
     {
 
         Sheep sheep = selectedSheep.GetComponent<Sheep>();
-        if (sheep.isInGoal() == true)
+        if (sheep.IsInGoal() == true)
         {
-            state = State.selecting;
+            state = State.SelectSheep;
             return;
         }
 
@@ -110,9 +109,9 @@ public class Wolf : MonoBehaviour
         if (distance < 0.5f)
         {
             SoundManager.Instance.PlaySheepClip();
-            sheep.changeHuntedState();
+            sheep.ChangeHuntedState();
 
-            state = State.leaving;
+            state = State.LeaveSceneWithHuntedSheep;
         }
     }
 
@@ -122,7 +121,7 @@ public class Wolf : MonoBehaviour
         if (Vector3.Distance(transform.position, selectedExit) < 2)
         {
             reset();
-            selectedSheep.GetComponent<Sheep>().killSheep();
+            selectedSheep.GetComponent<Sheep>().KillSheep();
             Destroy(selectedSheep.gameObject);
         }
 
@@ -146,21 +145,21 @@ public class Wolf : MonoBehaviour
 
         if(playerDistance < minPlayerDistance && blueWolfDistance < grabDistance && redWolfDistance < grabDistance)
         {
-            if (state != State.grabed && state != State.reseting)
+            if (state != State.GrabbedByPlayers && state != State.RestaringCicle)
             {
                 setGrabState();
                 if (selectedSheep)
                 {
                     Sheep sheep = selectedSheep.GetComponent<Sheep>();
-                    if (sheep.getHuntedState())
+                    if (sheep.GetHuntedState())
                     {
-                        sheep.changeHuntedState();
+                        sheep.ChangeHuntedState();
                     }
                 }
             }
         } else
         {
-            if(state == State.grabed)
+            if(state == State.GrabbedByPlayers)
             {
                 setNonGrabState();
             }
@@ -169,9 +168,9 @@ public class Wolf : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Goal") && state == State.grabed) // 2
+        if (other.CompareTag("Goal") && state == State.GrabbedByPlayers) // 2
         {
-            state = State.reseting;
+            state = State.RestaringCicle;
             if(selectedSheep)
                 selectedSheep.GetComponent<Sheep>().mira.SetActive(false);
         }
@@ -191,25 +190,25 @@ public class Wolf : MonoBehaviour
             
         switch (state)
         {
-            case State.outside:
+            case State.WaitOutside:
                 stateOutside();
                 break;
-            case State.inside:
+            case State.EnterAndMoveInCircle:
                 stateInside();
                 break;
-            case State.selecting:
+            case State.SelectSheep:
                 stateSelecting();
                 break;
-            case State.hunting:
+            case State.HuntSelectedSheep:
                 stateHunting();
                 break;
-            case State.leaving:
+            case State.LeaveSceneWithHuntedSheep:
                 stateLeaving();
                 break;
-            case State.grabed:
+            case State.GrabbedByPlayers:
                 stateGrabed();
                 break;
-            case State.reseting:
+            case State.RestaringCicle:
                 stateReseting();
                 break;
         }
@@ -218,11 +217,11 @@ public class Wolf : MonoBehaviour
     void setGrabState()
     {
         lastState = state;
-        state = State.grabed;
+        state = State.GrabbedByPlayers;
     }
 
     void setNonGrabState()
     {
-        state = (lastState == State.leaving) ? State.hunting : lastState;
+        state = (lastState == State.LeaveSceneWithHuntedSheep) ? State.HuntSelectedSheep : lastState;
     }
 }

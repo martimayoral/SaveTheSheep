@@ -11,13 +11,13 @@ public class sheepState : MonoBehaviour
     [HideInInspector]
     public int savedSheep;
 
-    // Start is called before the first frame update
     void Start()
     {
         totalSheep = transform.childCount;
+        killedSheep = 0;
+        savedSheep = 0;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (killedSheep >= 3)
@@ -25,7 +25,7 @@ public class sheepState : MonoBehaviour
             Debug.LogWarning("GAME LOSE");
         }
 
-        if(savedSheep == totalSheep - killedSheep)
+        if(savedSheep == (totalSheep - killedSheep))
         {
             Debug.LogWarning("GAME WIN");
         }
