@@ -6,8 +6,8 @@ public class Wolf : MonoBehaviour
 {
     public GameObject Sheeps;
 
-    public GameObject bluePlayer;
-    public GameObject redPlayer;
+    public Dog bluePlayer;
+    public Dog redPlayer;
 
     public float speed;
     public float minPlayerDistance;
@@ -175,8 +175,9 @@ public class Wolf : MonoBehaviour
         if (Vector3.Distance(transform.position, selectedExit) < 2)
         {
             ResetCycle();
-            selectedSheep.GetComponent<Sheep>().KillSheep();
+            GameState.Instance.killSheep();
             Destroy(selectedSheep.gameObject);
+            SoundManager.Instance.PlayWolfAgressiveClip();
         }
 
         Move(selectedExit);
@@ -221,6 +222,14 @@ public class Wolf : MonoBehaviour
         }
     }
 
+    void particlesFromPlayerToWolf(bool redClose, bool blueClose)
+    {
+        redPlayer.particleClose.SetActive(redClose);
+        bluePlayer.particleClose.SetActive(blueClose);
+        redPlayer.particleFar.SetActive(!redClose);
+        bluePlayer.particleFar.SetActive(!blueClose);
+    }
+
     void TestIfPlayersGrabTheWolf()
     {
         float distanceBetweenPlayers = Vector3.Distance(redPlayer.transform.position, bluePlayer.transform.position);
@@ -228,6 +237,19 @@ public class Wolf : MonoBehaviour
         float distanceBetweenBlueAndWolf = Vector3.Distance(transform.position, bluePlayer.transform.position);
 
         float distanceBetweenRedAndWolf = Vector3.Distance(redPlayer.transform.position, transform.position);
+
+
+        if (distanceBetweenBlueAndWolf < grabDistance)
+            particlesFromPlayerToWolf(false, true);
+        else if (distanceBetweenRedAndWolf < grabDistance)
+            particlesFromPlayerToWolf(true, false);
+        else
+        {
+            redPlayer.particleClose.SetActive(false);
+            bluePlayer.particleClose.SetActive(false);
+            redPlayer.particleFar.SetActive(false);
+            bluePlayer.particleFar.SetActive(false);
+        }
 
         if ((distanceBetweenPlayers < minPlayerDistance) &&
             (distanceBetweenBlueAndWolf < grabDistance) &&
@@ -239,9 +261,13 @@ public class Wolf : MonoBehaviour
                 SetGrabbedByPlayersState();
                 UnhuntSheep();
             }
+
+            particlesFromPlayerToWolf(true, true);
         }
         else
         {
+            
+
             if (state == State.GrabbedByPlayers) setNonGrabState();
         }
     }

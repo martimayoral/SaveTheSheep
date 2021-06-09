@@ -131,6 +131,7 @@ public class Sheep : MonoBehaviour
                 sheepInit = Inits.personal;
                 nextPos = sheepsStartPositions.transform.GetChild(Random.Range(0, sheepsStartPositions.transform.childCount)).position;
                 nextPos += new Vector3(Random.Range(-3,3),0, Random.Range(-3, 3));
+                GameState.Instance.positionedSheep++;
                 break;
             case Inits.personal:
                 next = Inits.play;
@@ -165,10 +166,6 @@ public class Sheep : MonoBehaviour
         return sheepHunted;
     }
 
-    public void KillSheep()
-    {
-        GameState.Instance.killedSheep++;
-    }
 
     public void SetSheepInGoal()
     {

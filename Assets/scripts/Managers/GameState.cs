@@ -7,6 +7,7 @@ public class GameState : MonoBehaviour
     public static GameState Instance;
 
     public int totalSheep;
+    public int positionedSheep;
     public int killedSheep;
     public int savedSheep;
 
@@ -27,6 +28,10 @@ public class GameState : MonoBehaviour
     public GameObject t1;
     public GameObject t2;
     public GameObject t3;
+
+    public GameObject tumb1;
+    public GameObject tumb2;
+    public GameObject tumb3;
 
     public enum Stage
     {
@@ -51,7 +56,6 @@ public class GameState : MonoBehaviour
         textActive = false;
 
         Restart();
-        killedSheep = 0;
     }
 
     private void nextWave()
@@ -61,14 +65,19 @@ public class GameState : MonoBehaviour
 
         Restart();
         startingSheep += addedSheepPerWin;
-        killedSheep = Mathf.Max(0, killedSheep - 1);
     }
 
     private void Restart()
     {
+        killedSheep = 0;
+        tumb1.SetActive(false);
+        tumb2.SetActive(false);
+        tumb3.SetActive(false);
+
         wolf.ResetCycle();
         stage = Stage.starting;
         savedSheep = 0;
+        positionedSheep = 0;
         totalSheep = 0;
         foreach (Transform child in sheepParent.transform)
         {
@@ -78,11 +87,14 @@ public class GameState : MonoBehaviour
 
     void StageStarting()
     {
-        if (totalSheep >= startingSheep)
+        if(positionedSheep == startingSheep)
         {
             stage = Stage.playing;
             wolf.ResetCycle();
         }
+        if (totalSheep == startingSheep)
+            return;
+
 
         InstantiationTimer -= Time.deltaTime;
         if (InstantiationTimer <= 0)
@@ -100,7 +112,6 @@ public class GameState : MonoBehaviour
 
         startingSheep = Mathf.Max(startingSheep - removeSheepPerLose, minSheep);
         Restart();
-        killedSheep = 0;
     }
 
     void activateText()
@@ -111,16 +122,29 @@ public class GameState : MonoBehaviour
 
     void StagePlaying()
     {
-        if (killedSheep >= 3)
-        {
-            stage = Stage.lose;
-            activateText();
-        }
-
         if (savedSheep == (totalSheep - killedSheep))
         {
             stage = Stage.win;
             activateText();
+        }
+    }
+
+    public void killSheep()
+    {
+        killedSheep++;
+        switch (killedSheep)
+        {
+            case 1:
+                tumb1.SetActive(true);
+                break;
+            case 2:
+                tumb2.SetActive(true);
+                break;
+            case 3:
+                tumb3.SetActive(true);
+                stage = Stage.lose;
+                activateText();
+                break;
         }
     }
 
@@ -170,7 +194,7 @@ public class GameState : MonoBehaviour
         }
     }
 
-
+    
     void Update()
     {
         if(textActive)
