@@ -8,14 +8,14 @@ public class Goal : MonoBehaviour
     public float afterCollisionAliveTime;
     public string tagFilter;
 
-    private void OnTriggerEnter(Collider other) // 1
+    private void OnTriggerEnter(Collider other) 
     {
-        if (other.CompareTag(tagFilter)) // 2
+        if (other.CompareTag(tagFilter)) 
         {
             Sheep sheep = other.gameObject.GetComponent<Sheep>();
             sheep.SetSheepInGoal();
             sheep.reduceVelocity = false;
-            Destroy(other.gameObject, afterCollisionAliveTime); // 3
+            Destroy(other.gameObject, afterCollisionAliveTime); 
         }
 
     }

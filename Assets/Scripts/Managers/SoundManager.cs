@@ -18,12 +18,6 @@ public class SoundManager : MonoBehaviour
         cameraPosition = Camera.main.transform.position;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     private void PlaySound(AudioClip clip)
     {
         AudioSource.PlayClipAtPoint(clip, cameraPosition);
