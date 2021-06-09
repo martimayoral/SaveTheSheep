@@ -2410,7 +2410,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cc3ec67e242d43a28ff03b93424d962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wolfSound: {fileID: 8300000, guid: 125746626e3ee46bab1ce03b840082bb, type: 3}
+  ambientBirdsSound: {fileID: 8300000, guid: 48b7b867460fe4855a68ef7585c752f8, type: 3}
+  dogSound: {fileID: 8300000, guid: 6e5b6167b87ec4b81922621b045381a6, type: 3}
+  grabSound: {fileID: 8300000, guid: 86749cabecf844f33b170f9d932c4da3, type: 3}
+  wolfHowlSound: {fileID: 8300000, guid: 481ccfaa6443f49feb67f3758d7fa39c, type: 3}
+  wolfAgressiveSound: {fileID: 8300000, guid: 67239e4b2b46a4c85a656785d62ca3c5, type: 3}
+  wolfCrySound: {fileID: 8300000, guid: 7dd918066ac2c4a25bad5a3b9cb11617, type: 3}
+  wolfSmallCrySound: {fileID: 8300000, guid: 5df9097619400425d89f82854f078b5c, type: 3}
   sheepSound: {fileID: 8300000, guid: 0a08247356103403eb45dfb3106266cf, type: 3}
 --- !u!1001 &546439564
 PrefabInstance:

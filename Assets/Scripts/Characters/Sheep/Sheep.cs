@@ -139,6 +139,7 @@ public class Sheep : MonoBehaviour
     {
         sheepInGoal = true;
         transform.parent.GetComponent<sheepState>().savedSheep++;
+        SoundManager.Instance.PlaySheepClip();
     }
 
     public bool IsInGoal()

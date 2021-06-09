@@ -47,6 +47,7 @@ public class Wolf : MonoBehaviour
     {
         if (other.CompareTag("Goal") && state == State.GrabbedByPlayers) // 2
         {
+            SoundManager.Instance.PlayWolfSmallCryClip();
             state = State.RestaringCycle;
             if (selectedSheep)
                 selectedSheep.GetComponent<Sheep>().mira.SetActive(false);
@@ -102,7 +103,7 @@ public class Wolf : MonoBehaviour
     {
         if (Time.time > toInside)
         {
-            SoundManager.Instance.PlayWolfClip();
+            SoundManager.Instance.PlayWolfHowlClip();
             state = State.EnterAndMoveInCircle;
         }
     }
@@ -119,7 +120,10 @@ public class Wolf : MonoBehaviour
 
         transform.position = Vector3.Lerp(transform.position, nextPoint, Time.deltaTime * 0.5f);
 
-        if (Time.time > toHunt) state = State.SelectSheep;
+        if (Time.time > toHunt)
+        {
+            state = State.SelectSheep;
+        }
     }
 
     void StateSelectSheep()
@@ -133,6 +137,8 @@ public class Wolf : MonoBehaviour
 
         sheep.mira.SetActive(true);
         state = State.HuntSelectedSheep;
+
+        SoundManager.Instance.PlayWolfAgressiveClip();
     }
 
     // perseguint a la ovella
@@ -188,6 +194,9 @@ public class Wolf : MonoBehaviour
     {
         lastState = state;
         state = State.GrabbedByPlayers;
+
+        SoundManager.Instance.PlayWolfGrabbedClip();
+        SoundManager.Instance.PlayWolfCryClip();
     }
 
     void setNonGrabState()
