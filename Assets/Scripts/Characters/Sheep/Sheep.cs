@@ -173,7 +173,10 @@ public class Sheep : MonoBehaviour
     public void SetSheepInGoal()
     {
         sheepInGoal = true;
+
         GameState.Instance.savedSheep++;
+
+        SoundManager.Instance.PlaySheepClip();
     }
 
     public bool IsInGoal()
