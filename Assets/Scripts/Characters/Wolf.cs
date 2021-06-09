@@ -128,7 +128,10 @@ public class Wolf : MonoBehaviour
         selectedSheep = Sheeps.transform.GetChild(Random.Range(0,Sheeps.transform.childCount-1)).gameObject;
         selectedExit = exits[Random.Range(0, exits.Length - 1)].transform.position;
 
-        selectedSheep.GetComponent<Sheep>().mira.SetActive(true);
+        Sheep sheep = selectedSheep.GetComponent<Sheep>();
+        if (sheep.IsInGoal()) return;
+
+        sheep.mira.SetActive(true);
         state = State.HuntSelectedSheep;
     }
 
@@ -137,7 +140,7 @@ public class Wolf : MonoBehaviour
     {
 
         Sheep sheep = selectedSheep.GetComponent<Sheep>();
-        if (sheep.IsInGoal() == true)
+        if (sheep.IsInGoal())
         {
             state = State.SelectSheep;
             return;
