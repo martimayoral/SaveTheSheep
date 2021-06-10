@@ -9768,6 +9768,11 @@ PrefabInstance:
       propertyPath: TriggerModule.collisionShape0
       value: 
       objectReference: {fileID: 197973895}
+    - target: {fileID: 3337972306068234885, guid: 83b2c9678449cb643a58303fb7f8c09a,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 3337972306068234938, guid: 83b2c9678449cb643a58303fb7f8c09a,
         type: 3}
       propertyPath: m_IsActive
