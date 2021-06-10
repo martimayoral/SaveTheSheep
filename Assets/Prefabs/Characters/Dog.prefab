@@ -50,6 +50,8 @@ MonoBehaviour:
   player: {fileID: 0}
   interpolationFactior: 0.1
   minDistance: 0.5
+  particleClose: {fileID: 0}
+  particleFar: {fileID: 0}
 --- !u!54 &641722240
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -81,7 +83,7 @@ PrefabInstance:
     - target: {fileID: 7682407282525456071, guid: 66520fac0e1697447b50635a6f1cf476,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7682407282525456071, guid: 66520fac0e1697447b50635a6f1cf476,
         type: 3}
@@ -156,7 +158,7 @@ PrefabInstance:
     - target: {fileID: 2879728785736049166, guid: f9338aeb125586d42adf54b3b3c42f27,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 2879728785736049166, guid: f9338aeb125586d42adf54b3b3c42f27,
         type: 3}
@@ -231,7 +233,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 2557c4131062c4370ae1285ea393efec,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.040497836
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2557c4131062c4370ae1285ea393efec,
         type: 3}
