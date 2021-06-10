@@ -224,8 +224,8 @@ public class Wolf : MonoBehaviour
 
     void particlesFromPlayerToWolf(bool redClose, bool blueClose)
     {
-        redPlayer.particleClose.SetActive(redClose);
         bluePlayer.particleClose.SetActive(blueClose);
+        redPlayer.particleClose.SetActive(redClose);
         redPlayer.particleFar.SetActive(!redClose);
         bluePlayer.particleFar.SetActive(!blueClose);
     }
@@ -239,17 +239,7 @@ public class Wolf : MonoBehaviour
         float distanceBetweenRedAndWolf = Vector3.Distance(redPlayer.transform.position, transform.position);
 
 
-        if (distanceBetweenBlueAndWolf < grabDistance)
-            particlesFromPlayerToWolf(false, true);
-        else if (distanceBetweenRedAndWolf < grabDistance)
-            particlesFromPlayerToWolf(true, false);
-        else
-        {
-            redPlayer.particleClose.SetActive(false);
-            bluePlayer.particleClose.SetActive(false);
-            redPlayer.particleFar.SetActive(false);
-            bluePlayer.particleFar.SetActive(false);
-        }
+        
 
         if ((distanceBetweenPlayers < minPlayerDistance) &&
             (distanceBetweenBlueAndWolf < grabDistance) &&
@@ -266,7 +256,17 @@ public class Wolf : MonoBehaviour
         }
         else
         {
-            
+            if (distanceBetweenBlueAndWolf < grabDistance)
+                particlesFromPlayerToWolf(false, true);
+            else if (distanceBetweenRedAndWolf < grabDistance)
+                particlesFromPlayerToWolf(true, false);
+            else
+            {
+                redPlayer.particleClose.SetActive(false);
+                bluePlayer.particleClose.SetActive(false);
+                redPlayer.particleFar.SetActive(false);
+                bluePlayer.particleFar.SetActive(false);
+            }
 
             if (state == State.GrabbedByPlayers) setNonGrabState();
         }
