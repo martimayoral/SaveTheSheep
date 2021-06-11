@@ -2551,6 +2551,8 @@ MonoBehaviour:
   wolfCrySound: {fileID: 8300000, guid: 7dd918066ac2c4a25bad5a3b9cb11617, type: 3}
   wolfSmallCrySound: {fileID: 8300000, guid: 5df9097619400425d89f82854f078b5c, type: 3}
   sheepSound: {fileID: 8300000, guid: 0a08247356103403eb45dfb3106266cf, type: 3}
+  bellSound: {fileID: 8300000, guid: 54f7946c26d374ee4b27963405e96d87, type: 3}
+  gameOverSound: {fileID: 8300000, guid: 36afce0f934864c99b919b113cd61d48, type: 3}
 --- !u!1001 &546439564
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2919,7 +2921,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 5136766784226538256}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1312331533}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a9faf5e8787a4c46952d53235288aba, type: 3}

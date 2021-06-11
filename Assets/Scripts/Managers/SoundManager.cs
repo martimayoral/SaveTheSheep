@@ -20,6 +20,10 @@ public class SoundManager : MonoBehaviour
 
     public AudioClip sheepSound;
 
+    public AudioClip bellSound;
+    public AudioClip gameOverSound;
+
+
     private Vector3 cameraPosition;
 
     private float loopAmbientSoundTime;
@@ -115,5 +119,15 @@ public class SoundManager : MonoBehaviour
     public void PlaySheepClip()
     {
         PlaySound(sheepSound);
+    }
+
+    public void PlayBellClip()
+    {
+        PlaySound(bellSound);
+    }
+
+    public void PlayGameOverClip()
+    {
+        PlaySound(gameOverSound);
     }
 }

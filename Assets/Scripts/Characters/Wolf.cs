@@ -48,7 +48,7 @@ public class Wolf : MonoBehaviour
     {
         if (other.CompareTag("Goal") && state == State.GrabbedByPlayers) // 2
         {
-            SoundManager.Instance.PlayWolfSmallCryClip();
+            SoundManager.Instance.PlayWolfCryClip();
             state = State.RestaringCycle;
             if (selectedSheep)
                 selectedSheep.GetComponent<Sheep>().mira.SetActive(false);
@@ -177,7 +177,7 @@ public class Wolf : MonoBehaviour
             ResetCycle();
             GameState.Instance.killSheep();
             Destroy(selectedSheep.gameObject);
-            SoundManager.Instance.PlayWolfAgressiveClip();
+            SoundManager.Instance.PlayBellClip();
         }
 
         Move(selectedExit);
@@ -202,7 +202,7 @@ public class Wolf : MonoBehaviour
         state = State.GrabbedByPlayers;
 
         SoundManager.Instance.PlayWolfGrabbedClip();
-        SoundManager.Instance.PlayWolfCryClip();
+        SoundManager.Instance.PlayWolfSmallCryClip();
     }
 
     void setNonGrabState()
