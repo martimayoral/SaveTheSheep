@@ -189,6 +189,13 @@ public class Wolf : MonoBehaviour
         Vector3 bluePos = bluePlayer.transform.position;
         Vector3 redPos = redPlayer.transform.position;
         transform.position = redPos + ((bluePos - redPos) / 2);
+
+        Vector3 vec = bluePos - redPos;
+        Vector3 perp = Vector3.Cross(vec, new Vector3(0,1,0));
+        perp.Normalize();
+
+        Vector3 target = 100 * perp + transform.position;
+        transform.LookAt(target);
     }
 
     void StateRestartingCycle()
