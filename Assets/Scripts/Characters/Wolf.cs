@@ -186,7 +186,9 @@ public class Wolf : MonoBehaviour
     // agafat pel jugadors
     void StateGrabbedByPlayers()
     {
-        transform.position = redPlayer.transform.position + (bluePlayer.transform.position - redPlayer.transform.position) / 2;
+        Vector3 bluePos = bluePlayer.transform.position;
+        Vector3 redPos = redPlayer.transform.position;
+        transform.position = redPos + ((bluePos - redPos) / 2);
     }
 
     void StateRestartingCycle()
