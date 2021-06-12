@@ -2737,6 +2737,7 @@ MonoBehaviour:
   sheepSound: {fileID: 8300000, guid: 0a08247356103403eb45dfb3106266cf, type: 3}
   bellSound: {fileID: 8300000, guid: 54f7946c26d374ee4b27963405e96d87, type: 3}
   gameOverSound: {fileID: 8300000, guid: 36afce0f934864c99b919b113cd61d48, type: 3}
+  nextWaveSound: {fileID: 8300000, guid: 51b56d623cb1340dd8f443bfdb508f3b, type: 3}
 --- !u!1001 &546439564
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -44,7 +44,7 @@ public class GameState : MonoBehaviour
     private float text;
     private bool textActive;
 
-    private bool loseAudioPlayed;
+    private bool endAudioPlayed;
 
     [HideInInspector]
     public Stage stage;
@@ -56,13 +56,20 @@ public class GameState : MonoBehaviour
         Instance = this;
         text = -1;
         textActive = false;
-        loseAudioPlayed = false;
+        endAudioPlayed = false;
 
         Restart();
     }
 
     private void nextWave()
     {
+
+        if (!endAudioPlayed)
+        {
+            SoundManager.Instance.PlayNextWaveClip();
+            endAudioPlayed = true;
+        }
+
         if (text > 0)
             return;
 
@@ -72,7 +79,7 @@ public class GameState : MonoBehaviour
 
     private void Restart()
     {
-        loseAudioPlayed = false;
+        endAudioPlayed = false;
         killedSheep = 0;
         tumb1.SetActive(false);
         tumb2.SetActive(false);
@@ -111,10 +118,10 @@ public class GameState : MonoBehaviour
 
     void gameLose()
     {
-        if(!loseAudioPlayed)
+        if(!endAudioPlayed)
         { 
             SoundManager.Instance.PlayGameOverClip();
-            loseAudioPlayed = true;
+            endAudioPlayed = true;
         }
 
         if (text > 0)

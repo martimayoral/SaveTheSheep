@@ -22,7 +22,7 @@ public class SoundManager : MonoBehaviour
 
     public AudioClip bellSound;
     public AudioClip gameOverSound;
-
+    public AudioClip nextWaveSound;
 
     private Vector3 cameraPosition;
 
@@ -129,5 +129,10 @@ public class SoundManager : MonoBehaviour
     public void PlayGameOverClip()
     {
         PlaySound(gameOverSound);
+    }
+
+    public void PlayNextWaveClip()
+    {
+        PlaySound(nextWaveSound);
     }
 }
